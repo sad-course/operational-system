@@ -26,22 +26,12 @@ void handlerChildReset(int);
 void handlerPrintColor(int) {
     const char *out = NULL;
     switch (child_color) {
-        case 0: out = "RED "; break;
-        case 1: out = "GREEN "; break;
-        default: out = "YELLOW "; break;
+        case 0: out = RED_BG; break;
+        case 1: out = GREEN_BG; break;
+        default: out = YELLOW_BG; break;
     }
 
-
-    char buf[140];
-    size_t len = 0;
-    if (child_color == 0) {
-        len = snprintf(buf, sizeof(buf), "%s%s   %s\n", out, RED_BG, RESET);
-    } else if (child_color == 1) {
-        len = snprintf(buf, sizeof(buf), "%s%s   %s\n", out, GREEN_BG, RESET);
-    } else {
-        len = snprintf(buf, sizeof(buf), "%s%s   %s\n", out, YELLOW_BG, RESET);
-    }
-    if (len > 0) write(STDOUT_FILENO, buf, (size_t)len);
+    dprintf(STDOUT_FILENO, "%s   %s\n", out, RESET);
 
     child_color = (child_color + 1) % 3;
 }
@@ -63,7 +53,7 @@ void handlerAlarmSignaler(int) {
         return;
     }
 
-    remaining_time = alarm(3);
+    remaining_time = alarm(2);
     parent_color = 0;
 }
 
